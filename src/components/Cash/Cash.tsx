@@ -98,28 +98,30 @@ const Cash: React.FC = () => {
       ) : error ? (
         <p className={styles.error}>{error}</p>
       ) : (
-        <table>
-          <thead>
-            <tr>
-              <th>Дата</th>
-              <th>Сумма</th>
-              <th>Тип</th>
-              <th>Описание</th>
-              <th>ID</th>
-            </tr>
-          </thead>
-          <tbody>
-            {operations.map((op) => (
-              <tr key={op._id}>
-                <td>{new Date(op.date).toLocaleDateString()}</td>
-                <td>{op.amount}</td>
-                <td>{op.type === 'income' ? 'Приход' : 'Расход'}</td>
-                <td>{op.description}</td>
-                <td>{op._id}</td>
+        <div className={styles.table_container}>
+          <table>
+            <thead>
+              <tr>
+                <th>Дата</th>
+                <th>Сумма</th>
+                <th>Тип</th>
+                <th>Описание</th>
+                <th>ID</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {operations.map((op) => (
+                <tr key={op._id}>
+                  <td>{new Date(op.date).toLocaleDateString()}</td>
+                  <td>{op.amount}</td>
+                  <td>{op.type === 'income' ? 'Приход' : 'Расход'}</td>
+                  <td>{op.description}</td>
+                  <td>{op._id}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

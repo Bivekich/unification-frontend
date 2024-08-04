@@ -102,34 +102,36 @@ const Finances: React.FC = () => {
         {transfers.length === 0 ? (
           <p>Нет переводов за последние 30 дней.</p>
         ) : (
-          <table>
-            <thead>
-              <tr>
-                <th>Дата</th>
-                <th>Из компании</th>
-                <th>Из банка</th>
-                <th>В компанию</th>
-                <th>В банк</th>
-                <th>Сумма</th>
-                <th>Тип</th>
-                <th>ID</th>
-              </tr>
-            </thead>
-            <tbody>
-              {transfers.map((transfer) => (
-                <tr key={transfer._id}>
-                  <td>{formatDate(transfer.date)}</td>
-                  <td>{transfer.fromCompany}</td>
-                  <td>{transfer.fromBank}</td>
-                  <td>{transfer.toCompany}</td>
-                  <td>{transfer.toBank}</td>
-                  <td>{transfer.amount}₽</td>
-                  <td>{transferTypes[transfer.type] || transfer.type}</td>
-                  <td>{transfer._id}</td>
+          <div className={styles.table_container}>
+            <table>
+              <thead>
+                <tr>
+                  <th>Дата</th>
+                  <th>Из компании</th>
+                  <th>Из банка</th>
+                  <th>В компанию</th>
+                  <th>В банк</th>
+                  <th>Сумма</th>
+                  <th>Тип</th>
+                  <th>ID</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {transfers.map((transfer) => (
+                  <tr key={transfer._id}>
+                    <td>{formatDate(transfer.date)}</td>
+                    <td>{transfer.fromCompany}</td>
+                    <td>{transfer.fromBank}</td>
+                    <td>{transfer.toCompany}</td>
+                    <td>{transfer.toBank}</td>
+                    <td>{transfer.amount}₽</td>
+                    <td>{transferTypes[transfer.type] || transfer.type}</td>
+                    <td>{transfer._id}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </section>
     </div>

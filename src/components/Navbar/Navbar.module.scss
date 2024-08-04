@@ -25,3 +25,33 @@ a {
     color: #f0f0f0;
   }
 }
+
+@media (max-width: 768px) {
+  ul {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  li {
+    margin: 0.5rem 0;
+  }
+}
+
+/* Смартфоны */
+@media (max-width: 480px) {
+  nav {
+    padding: 0.5rem;
+  }
+
+  ul {
+    font-size: 0.875rem;
+  }
+
+  li {
+    margin: 0.5rem 0;
+  }
+
+  a {
+    font-size: 0.875rem;
+  }
+}

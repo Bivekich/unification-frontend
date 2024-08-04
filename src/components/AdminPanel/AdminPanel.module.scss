@@ -76,3 +76,52 @@ button.remove {
 .bank-section input {
   margin-bottom: 0;
 }
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1.5rem;
+    max-width: 95%;
+  }
+
+  input,
+  select {
+    width: calc(100% - 1.5rem);
+    margin: 0.5rem 0.75rem;
+  }
+
+  button {
+    width: 100%;
+    margin: 0.5rem 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 1rem;
+    max-width: 95%;
+  }
+
+  input,
+  select {
+    width: calc(100% - 1rem);
+    margin: 0.5rem 0.5rem;
+    padding: 0.5rem;
+    font-size: 0.875rem;
+  }
+
+  button {
+    width: 100%;
+    margin: 0.5rem 0;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+  }
+}

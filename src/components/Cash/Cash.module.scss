@@ -1,10 +1,9 @@
-/* Cash.module.scss */
-
 .container {
-  max-width: 800px;
+  max-width: 100%;
   margin: 0 auto;
   padding: 20px;
   font-family: Arial, sans-serif;
+  overflow: hidden;
 }
 
 h2 {
@@ -30,6 +29,7 @@ select {
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 4px;
+  box-sizing: border-box;
 }
 
 button {
@@ -40,15 +40,24 @@ button {
   border-radius: 4px;
   cursor: pointer;
   font-size: 16px;
+  transition: background-color 0.3s;
+  box-sizing: border-box;
 }
 
 button:hover {
   background-color: #0056b3;
 }
 
+.table_container {
+  overflow-x: auto;
+}
+
 table {
   width: 100%;
+  min-width: 600px;
   border-collapse: collapse;
+  margin-top: 20px;
+  box-sizing: border-box;
 }
 
 th,
@@ -56,6 +65,7 @@ td {
   padding: 10px;
   text-align: left;
   border-bottom: 1px solid #ddd;
+  box-sizing: border-box;
 }
 
 th {
@@ -70,4 +80,63 @@ tr:nth-child(even) {
   text-align: center;
   font-size: 18px;
   color: #007bff;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+
+  button {
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+  }
+
+  input[type='number'],
+  input[type='text'],
+  select {
+    padding: 12px;
+  }
+
+  table {
+    font-size: 14px;
+  }
+
+  th,
+  td {
+    padding: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 10px;
+  }
+
+  button {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  input[type='number'],
+  input[type='text'],
+  select {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  table {
+    font-size: 12px;
+  }
+
+  th,
+  td {
+    padding: 6px;
+  }
+
+  .loading {
+    font-size: 16px;
+  }
 }
