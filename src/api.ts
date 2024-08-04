@@ -1,5 +1,11 @@
 import axios from 'axios';
-import { Company, User, TransferData, UserResponse } from './types';
+import {
+  Company,
+  User,
+  TransferData,
+  UserResponse,
+  CashOperation,
+} from './types';
 
 const api = axios.create({
   baseURL: 'https://apiunification-two.vercel.app/api',
@@ -38,3 +44,18 @@ export const updateBankBalance = (data: {
 }) => api.put('/admin/company/bank', data);
 
 export const addUser = (data: User) => api.post('/admin/user', data);
+
+export const addCashOperation = (data: {
+  amount: number;
+  type: 'expense' | 'income';
+  description: string;
+}) => api.post('/cash/add', data);
+
+export const getCashOperations = () => api.get<CashOperation[]>('/cash');
+
+export const getCashOperationsLast30Days = () => {
+  return api.get('/cash/last-30-days');
+};
+
+export const getCashBalance = () =>
+  api.get<{ balance: number }>('/cash/balance');

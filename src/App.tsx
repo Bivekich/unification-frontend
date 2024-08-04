@@ -6,6 +6,7 @@ import Transfers from './components/Transfers/Transfers';
 import Finances from './components/Finances/Finances';
 import AdminPanel from './components/AdminPanel/AdminPanel';
 import Navbar from './components/Navbar/Navbar';
+import Cash from './components/Cash/Cash';
 import styles from './App.module.scss';
 
 const App: React.FC = () => {
@@ -32,6 +33,7 @@ const App: React.FC = () => {
             />
             <Route path="/user-info" element={<UserInfo />} />
             <Route path="/transfers" element={<Transfers />} />
+            <Route path="/cash" element={<Cash />} />
             <Route path="/finances" element={<Finances />} />
             <Route path="/admin" element={<AdminPanel />} />
           </Routes>

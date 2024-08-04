@@ -33,3 +33,11 @@ export interface TransferData {
 }
 
 export type UserRole = 'user' | 'cashier' | 'admin';
+
+export interface CashOperation {
+  _id: string;
+  amount: number;
+  type: 'expense' | 'income'; 
+  description: string;
+  date: string;
+}

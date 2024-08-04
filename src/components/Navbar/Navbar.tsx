@@ -15,6 +15,9 @@ const Navbar: React.FC = () => {
           <Link to="/transfers">Переводы</Link>
         </li>
         <li>
+          <Link to="/cash">Касса</Link>
+        </li>
+        <li>
           <Link to="/finances">Финансы</Link>
         </li>
         {role === 'admin' && (
