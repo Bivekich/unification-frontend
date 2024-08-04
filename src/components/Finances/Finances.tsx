@@ -36,7 +36,6 @@ const Finances: React.FC = () => {
         setFinances(financesResponse.data);
 
         const transfersResponse = await getRecentTransfers();
-
         if (Array.isArray(transfersResponse.data)) {
           setTransfers(transfersResponse.data);
         }
@@ -47,6 +46,18 @@ const Finances: React.FC = () => {
 
     fetchData();
   }, []);
+
+  // Calculate the total balance of all banks across all companies
+  const calculateTotalBalance = () => {
+    return finances.reduce((total, company) => {
+      return (
+        total +
+        company.banks.reduce((bankTotal, bank) => {
+          return bankTotal + bank.balance;
+        }, 0)
+      );
+    }, 0);
+  };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -62,6 +73,15 @@ const Finances: React.FC = () => {
   return (
     <div className={styles.container}>
       <h1>Финансы</h1>
+
+      {/* New section for total balance */}
+      <section>
+        <h2>Общий баланс</h2>
+        <p>
+          Общая сумма баланса на всех банках всех компаний:{' '}
+          {calculateTotalBalance()}₽
+        </p>
+      </section>
 
       <section>
         <h2>Информация о компаниях</h2>

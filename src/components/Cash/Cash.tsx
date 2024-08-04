@@ -11,7 +11,7 @@ const Cash: React.FC = () => {
   const [operations, setOperations] = useState<CashOperation[]>([]);
   const [balance, setBalance] = useState<number>(0);
   const [amount, setAmount] = useState<number>(0);
-  const [type, setType] = useState<'expense' | 'income'>('income');
+  const [type, setType] = useState<'expense' | 'income'>('expense');
   const [description, setDescription] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
