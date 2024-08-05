@@ -1,31 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import styles from './Transfers.module.scss';
+import React, { useState, useEffect } from "react";
+import styles from "./Transfers.module.scss";
 import {
   internalTransfer,
   cashTransfer,
   customTransfer,
+  replenishTransfer,
   getFinances,
-} from '../../api';
-import { Company, Bank } from '../../types';
+} from "../../api";
+import { Company, Bank } from "../../types";
 
 const Transfers: React.FC = () => {
   const [transferType, setTransferType] = useState<
-    'internal' | 'cash' | 'custom'
-  >('internal');
+    "internal" | "cash" | "custom" | "replenish"
+  >("internal");
   const [data, setData] = useState<{
     fromCompany: string;
     fromBankName?: string;
-    toCompany?: string;
+    toCompany: string;
     toBankName?: string;
     amount: number;
     description?: string;
   }>({
-    fromCompany: '',
-    fromBankName: '',
-    toCompany: '',
-    toBankName: '',
+    fromCompany: "",
+    fromBankName: "",
+    toCompany: "",
+    toBankName: "",
     amount: 0,
-    description: '',
+    description: "",
   });
 
   const [companies, setCompanies] = useState<Company[]>([]);
@@ -40,7 +41,7 @@ const Transfers: React.FC = () => {
         setCompanies(response.data);
         setToCompanies(response.data);
       } catch (error) {
-        console.error('Ошибка при загрузке данных о компаниях:', error);
+        console.error("Ошибка при загрузке данных о компаниях:", error);
       }
     };
 
@@ -81,16 +82,18 @@ const Transfers: React.FC = () => {
 
   const handleSubmit = async () => {
     try {
-      if (transferType === 'internal') {
+      if (transferType === "internal") {
         await internalTransfer(data);
-      } else if (transferType === 'cash') {
+      } else if (transferType === "cash") {
         await cashTransfer(data);
-      } else if (transferType === 'custom') {
+      } else if (transferType === "custom") {
         await customTransfer(data);
+      } else if (transferType === "replenish") {
+        await replenishTransfer(data);
       }
-      alert('Перевод выполнен успешно');
+      alert("Перевод выполнен успешно");
     } catch (error) {
-      alert('Ошибка при выполнении перевода');
+      alert("Ошибка при выполнении перевода");
     }
   };
 
@@ -101,37 +104,41 @@ const Transfers: React.FC = () => {
         <select
           value={transferType}
           onChange={(e) =>
-            setTransferType(e.target.value as 'internal' | 'cash' | 'custom')
+            setTransferType(
+              e.target.value as "internal" | "cash" | "custom" | "replenish"
+            )
           }
         >
           <option value="internal">Внутренний перевод</option>
           <option value="cash">Вывод наличных</option>
           <option value="custom">Произвольный перевод</option>
+          <option value="replenish">Пополнение</option>
         </select>
       </div>
-      <div className={styles.formGroup}>
-        <label className={styles.label} htmlFor="fromCompany">
-          От компании
-        </label>
-        <select
-          className={styles.input}
-          id="fromCompany"
-          name="fromCompany"
-          value={data.fromCompany}
-          onChange={handleChange}
-        >
-          <option value="">Выберите компанию</option>
-          {companies.map((company) => (
-            <option key={company.name} value={company.name}>
-              {company.name}
-            </option>
-          ))}
-        </select>
-      </div>
-      {(transferType === 'internal' ||
-        transferType === 'custom' ||
-        transferType === 'cash') && (
+
+      {(transferType === "internal" ||
+        transferType === "cash" ||
+        transferType === "custom") && (
         <>
+          <div className={styles.formGroup}>
+            <label className={styles.label} htmlFor="fromCompany">
+              От компании
+            </label>
+            <select
+              className={styles.input}
+              id="fromCompany"
+              name="fromCompany"
+              value={data.fromCompany}
+              onChange={handleChange}
+            >
+              <option value="">Выберите компанию</option>
+              {companies.map((company) => (
+                <option key={company.name} value={company.name}>
+                  {company.name}
+                </option>
+              ))}
+            </select>
+          </div>
           <div className={styles.formGroup}>
             <label className={styles.label} htmlFor="fromBankName">
               Из банка
@@ -140,7 +147,7 @@ const Transfers: React.FC = () => {
               className={styles.input}
               id="fromBankName"
               name="fromBankName"
-              value={data.fromBankName || ''}
+              value={data.fromBankName || ""}
               onChange={handleChange}
             >
               <option value="">Выберите банк</option>
@@ -153,7 +160,8 @@ const Transfers: React.FC = () => {
           </div>
         </>
       )}
-      {transferType === 'internal' && (
+
+      {transferType === "internal" && (
         <>
           <div className={styles.formGroup}>
             <label className={styles.label} htmlFor="toCompany">
@@ -163,7 +171,7 @@ const Transfers: React.FC = () => {
               className={styles.input}
               id="toCompany"
               name="toCompany"
-              value={data.toCompany || ''}
+              value={data.toCompany || ""}
               onChange={handleChange}
             >
               <option value="">Выберите компанию</option>
@@ -182,7 +190,7 @@ const Transfers: React.FC = () => {
               className={styles.input}
               id="toBankName"
               name="toBankName"
-              value={data.toBankName || ''}
+              value={data.toBankName || ""}
               onChange={handleChange}
             >
               <option value="">Выберите банк</option>
@@ -195,7 +203,8 @@ const Transfers: React.FC = () => {
           </div>
         </>
       )}
-      {transferType === 'custom' && (
+
+      {transferType === "custom" && (
         <>
           <div className={styles.formGroup}>
             <label className={styles.label} htmlFor="toCompany">
@@ -206,7 +215,7 @@ const Transfers: React.FC = () => {
               type="text"
               id="toCompany"
               name="toCompany"
-              value={data.toCompany || ''}
+              value={data.toCompany || ""}
               onChange={handleChange}
             />
           </div>
@@ -219,12 +228,108 @@ const Transfers: React.FC = () => {
               type="text"
               id="toBankName"
               name="toBankName"
-              value={data.toBankName || ''}
+              value={data.toBankName || ""}
+              onChange={handleChange}
+            />
+          </div>
+          <div className={styles.formGroup}>
+            <label className={styles.label} htmlFor="description">
+              Описание
+            </label>
+            <input
+              className={styles.input}
+              type="text"
+              id="description"
+              name="description"
+              value={data.description || ""}
               onChange={handleChange}
             />
           </div>
         </>
       )}
+
+      {transferType === "replenish" && (
+        <>
+          <div className={styles.formGroup}>
+            <label className={styles.label} htmlFor="fromCompany">
+              Из компании
+            </label>
+            <input
+              className={styles.input}
+              type="text"
+              id="fromCompany"
+              name="fromCompany"
+              value={data.fromCompany || ""}
+              onChange={handleChange}
+            />
+          </div>
+          <div className={styles.formGroup}>
+            <label className={styles.label} htmlFor="fromBankName">
+              Из банка
+            </label>
+            <input
+              className={styles.input}
+              type="text"
+              id="fromBankName"
+              name="fromBankName"
+              value={data.fromBankName || ""}
+              onChange={handleChange}
+            />
+          </div>
+          <div className={styles.formGroup}>
+            <label className={styles.label} htmlFor="description">
+              Описание
+            </label>
+            <input
+              className={styles.input}
+              type="text"
+              id="description"
+              name="description"
+              value={data.description || ""}
+              onChange={handleChange}
+            />
+          </div>
+          <div className={styles.formGroup}>
+            <label className={styles.label} htmlFor="toCompany">
+              В компанию
+            </label>
+            <select
+              className={styles.input}
+              id="toCompany"
+              name="toCompany"
+              value={data.toCompany || ""}
+              onChange={handleChange}
+            >
+              <option value="">Выберите компанию</option>
+              {toCompanies.map((company) => (
+                <option key={company.name} value={company.name}>
+                  {company.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className={styles.formGroup}>
+            <label className={styles.label} htmlFor="toBankName">
+              В банк
+            </label>
+            <select
+              className={styles.input}
+              id="toBankName"
+              name="toBankName"
+              value={data.toBankName || ""}
+              onChange={handleChange}
+            >
+              <option value="">Выберите банк</option>
+              {toBanks.map((bank) => (
+                <option key={bank.name} value={bank.name}>
+                  {bank.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        </>
+      )}
+
       <div className={styles.formGroup}>
         <label className={styles.label} htmlFor="amount">
           Сумма
@@ -238,21 +343,6 @@ const Transfers: React.FC = () => {
           onChange={handleChange}
         />
       </div>
-      {transferType === 'custom' && (
-        <div className={styles.formGroup}>
-          <label className={styles.label} htmlFor="description">
-            Описание
-          </label>
-          <input
-            className={styles.input}
-            type="text"
-            id="description"
-            name="description"
-            value={data.description || ''}
-            onChange={handleChange}
-          />
-        </div>
-      )}
       <button className={styles.button} onClick={handleSubmit}>
         Отправить
       </button>
