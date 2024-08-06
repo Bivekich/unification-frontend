@@ -32,12 +32,15 @@ export interface TransferData {
   description?: string;
 }
 
-export type UserRole = 'user' | 'cashier' | 'admin';
+export type UserRole = "user" | "cashier" | "admin";
 
 export interface CashOperation {
   _id: string;
   amount: number;
-  type: 'expense' | 'income'; 
+  type: "expense" | "income";
   description: string;
   date: string;
+  author?: string;
+  company?: string;
+  bank?: string;
 }

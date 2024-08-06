@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { getFinances, getRecentTransfers } from '../../api';
-import styles from './Finances.module.scss';
+import React, { useState, useEffect } from "react";
+import { getFinances, getRecentTransfers } from "../../api";
 
 interface Bank {
   name: string;
@@ -21,9 +20,10 @@ interface Transfer {
   fromCompany: string;
   toCompany: string;
   type: TransferType;
+  author: string;
 }
 
-type TransferType = 'cash' | 'internal' | 'custom';
+type TransferType = "cash" | "internal" | "custom" | "replenish";
 
 const Finances: React.FC = () => {
   const [finances, setFinances] = useState<Company[]>([]);
@@ -40,14 +40,13 @@ const Finances: React.FC = () => {
           setTransfers(transfersResponse.data);
         }
       } catch (error) {
-        console.error('Error fetching data');
+        console.error("Error fetching data");
       }
     };
 
     fetchData();
   }, []);
 
-  // Calculate the total balance of all banks across all companies
   const calculateTotalBalance = () => {
     return finances.reduce((total, company) => {
       return (
@@ -61,52 +60,62 @@ const Finances: React.FC = () => {
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+    return `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
   };
 
   const transferTypes: Record<TransferType, string> = {
-    cash: 'Вывод наличных',
-    internal: 'Внутренний перевод',
-    custom: 'Произвольный перевод',
+    cash: "Вывод наличных",
+    internal: "Внутренний перевод",
+    custom: "Произвольный перевод",
+    replenish: "Пополнение",
+  };
+
+  const sortedTransfers = transfers
+    .slice()
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+  const roundToTwoDecimalPlaces = (number: number): number => {
+    return Math.round(number * 100) / 100;
   };
 
   return (
-    <div className={styles.container}>
-      <h1>Финансы</h1>
+    <div className="container mt-4">
+      <h1 className="mb-4">Финансы</h1>
 
-      {/* New section for total balance */}
-      <section>
+      <section className="mb-4">
         <h2>Общий баланс</h2>
         <p>
-          Общая сумма баланса на всех банках всех компаний:{' '}
-          {calculateTotalBalance()}₽
+          Общая сумма баланса на всех банках всех компаний:{" "}
+          <strong>{roundToTwoDecimalPlaces(calculateTotalBalance())}₽</strong>
         </p>
       </section>
 
-      <section>
+      <section className="mb-4">
         <h2>Информация о компаниях</h2>
         {finances.map((company) => (
-          <div key={company.name}>
+          <div key={company.name} className="mb-3">
             <h3>{company.name}</h3>
             {company.banks.map((bank) => (
               <p key={bank.name}>
-                {bank.name}: {bank.balance}₽
+                {bank.name}:{" "}
+                <strong>{roundToTwoDecimalPlaces(bank.balance)}₽</strong>
               </p>
             ))}
           </div>
         ))}
       </section>
 
-      <section>
-        <h2>Последние платежи (за 30 дней)</h2>
-        {transfers.length === 0 ? (
+      <section className="mb-4">
+        <h2>Платежи (за последние 30 дней)</h2>
+        {sortedTransfers.length === 0 ? (
           <p>Нет переводов за последние 30 дней.</p>
         ) : (
-          <div className={styles.table_container}>
-            <table>
+          <div className="table-responsive">
+            <table className="table table-striped">
               <thead>
                 <tr>
                   <th>Дата</th>
+                  <th>Автор</th>
                   <th>Из компании</th>
                   <th>Из банка</th>
                   <th>В компанию</th>
@@ -117,9 +126,10 @@ const Finances: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {transfers.map((transfer) => (
+                {sortedTransfers.map((transfer) => (
                   <tr key={transfer._id}>
                     <td>{formatDate(transfer.date)}</td>
+                    <td>{transfer.author || "Не указан"}</td>
                     <td>{transfer.fromCompany}</td>
                     <td>{transfer.fromBank}</td>
                     <td>{transfer.toCompany}</td>

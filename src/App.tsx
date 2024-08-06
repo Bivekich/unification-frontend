@@ -1,19 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Login from './components/Login/Login';
-import UserInfo from './components/UserInfo/UserInfo';
-import Transfers from './components/Transfers/Transfers';
-import Finances from './components/Finances/Finances';
-import AdminPanel from './components/AdminPanel/AdminPanel';
-import Navbar from './components/Navbar/Navbar';
-import Cash from './components/Cash/Cash';
-import styles from './App.module.scss';
+import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Login from "./pages/Login/Login";
+import UserInfo from "./pages/UserInfo/UserInfo";
+import Transfers from "./pages/Transfers/Transfers";
+import Finances from "./pages/Finances/Finances";
+import AdminPanel from "./pages/AdminPanel/AdminPanel";
+import Navbar from "./pages/Navbar/Navbar";
+import Cash from "./pages/Cash/Cash";
 
 const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   useEffect(() => {
-    const role = localStorage.getItem('role');
+    const role = localStorage.getItem("role");
     setIsAuthenticated(!!role);
   }, []);
 
@@ -23,9 +22,9 @@ const App: React.FC = () => {
 
   return (
     <Router>
-      <div className={styles.app}>
+      <div className="d-flex flex-column min-vh-100">
         {isAuthenticated && <Navbar />}
-        <div className={styles.mainContent}>
+        <div className="container mt-4 flex-fill">
           <Routes>
             <Route
               path="/"

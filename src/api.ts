@@ -8,7 +8,7 @@ import {
 } from "./types";
 
 const api = axios.create({
-  baseURL: "https://apiunification-two.vercel.app/api",
+  baseURL: "http://localhost:3000/api",
 });
 
 export const login = (username: string, password: string) =>
@@ -58,6 +58,9 @@ export const addCashOperation = (data: {
   amount: number;
   type: "expense" | "income";
   description: string;
+  author?: string;
+  company?: string;
+  bank?: string;
 }) => api.post("/cash/add", data);
 
 export const getCashOperations = () => api.get<CashOperation[]>("/cash");
