@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { CashOperation } from "../../types";
+import { CashOperation, Company, Bank } from "../../types";
 import {
   addCashOperation,
   getCashOperationsLast30Days,
   getCashBalance,
+  getFinances,
 } from "../../api";
 
 const Cash: React.FC = () => {
@@ -25,9 +26,49 @@ const Cash: React.FC = () => {
   const handleCloseModal = () => setShowModal(false);
   const handleShowModal = () => setShowModal(true);
 
+  const [companies, setCompanies] = useState<Company[]>([]);
+  const [banks, setBanks] = useState<Bank[]>([]);
+
+  const [data, setData] = useState<{
+    selected_company: string;
+    bank: string;
+    author?: string;
+  }>({
+    selected_company: "",
+    bank: "",
+    author: localStorage.getItem("username") || "",
+  });
+
   const handleSubmit = async () => {
     handleShowModal();
   };
+
+  
+
+  useEffect(() => {
+    const fetchCompanies = async () => {
+      try {
+        const response = await getFinances();
+        setCompanies(response.data);
+      } catch (error) {
+        console.error("Ошибка при загрузке данных о компаниях:", error);
+      }
+    };
+
+    fetchCompanies();
+  }, []);
+
+
+  useEffect(() => {
+    const selectedCompany = companies.find(
+      (company) => company.name === data.selected_company
+    );
+    if (selectedCompany) {
+      setBanks(selectedCompany.banks);
+    } else {
+      setBanks([]);
+    }
+  }, [banks]);
 
   const confirmOperation = async () => {
     setLoading(true);
@@ -77,6 +118,16 @@ const Cash: React.FC = () => {
     fetchData();
   }, []);
 
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
   return (
     <div className="container mt-4">
       <h2 className="mb-4">Касса</h2>
@@ -96,25 +147,54 @@ const Cash: React.FC = () => {
           <label htmlFor="company" className="form-label">
             Из компании:
           </label>
-          <input
+          {/* <input
             type="text"
             id="company"
             className="form-control"
             value={company}
             onChange={(e) => setCompany(e.target.value)}
-          />
+          /> */}
+          <select
+          className="form-control"
+          id="selected_company"
+          name="selected_company"
+          value={data.selected_company || ""}
+          onChange={(e) => {setCompany(e.target.value); handleChange(e)}}
+        >
+          <option value="">Выберите компанию</option>
+          {companies.map((company) => (
+            <option key={company.name} value={company.name}>
+              {company.name}
+            </option>
+          ))}
+        </select>
+
         </div>
         <div className="mb-3">
           <label htmlFor="bank" className="form-label">
             Из банка:
           </label>
-          <input
+          {/* <input
             type="text"
             id="bank"
             className="form-control"
             value={bank}
             onChange={(e) => setBank(e.target.value)}
-          />
+          /> */}
+          <select
+          className="form-control"
+          id="bank"
+          name="bank"
+          value={data.bank || ""}
+          onChange={(e) => {setBank(e.target.value); handleChange(e)}}
+          >
+            <option value="">Выберите банк</option>
+            {banks.map((bank) => (
+              <option key={bank.name} value={bank.name}>
+                {bank.name}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="mb-3">
           <label htmlFor="amount" className="form-label">

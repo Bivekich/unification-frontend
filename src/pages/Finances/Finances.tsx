@@ -115,12 +115,12 @@ const Finances: React.FC = () => {
               <thead>
                 <tr>
                   <th>Дата</th>
+                  <th>Сумма</th>
                   <th>Автор</th>
                   <th>Из компании</th>
                   <th>Из банка</th>
                   <th>В компанию</th>
                   <th>В банк</th>
-                  <th>Сумма</th>
                   <th>Тип</th>
                   <th>ID</th>
                 </tr>
@@ -129,12 +129,12 @@ const Finances: React.FC = () => {
                 {sortedTransfers.map((transfer) => (
                   <tr key={transfer._id}>
                     <td>{formatDate(transfer.date)}</td>
+                    <td>{transfer.amount}₽</td>
                     <td>{transfer.author || "Не указан"}</td>
                     <td>{transfer.fromCompany}</td>
                     <td>{transfer.fromBank}</td>
                     <td>{transfer.toCompany}</td>
                     <td>{transfer.toBank}</td>
-                    <td>{transfer.amount}₽</td>
                     <td>{transferTypes[transfer.type] || transfer.type}</td>
                     <td>{transfer._id}</td>
                   </tr>

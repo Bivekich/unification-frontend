@@ -28,25 +28,37 @@ const ReplenishTransferForm: React.FC<Props> = ({
     <div className="container">
       <div className="form-group">
         <label htmlFor="fromCompany">Из компании</label>
-        <input
+        <select
           className="form-control"
-          type="text"
           id="fromCompany"
           name="fromCompany"
           value={data.fromCompany || ""}
           onChange={handleChange}
-        />
+        >
+          <option value="">Выберите компанию</option>
+          {companies.map((company) => (
+            <option key={company.name} value={company.name}>
+              {company.name}
+            </option>
+          ))}
+        </select>
       </div>
       <div className="form-group">
         <label htmlFor="fromBankName">Из банка</label>
-        <input
+        <select
           className="form-control"
-          type="text"
           id="fromBankName"
           name="fromBankName"
           value={data.fromBankName || ""}
           onChange={handleChange}
-        />
+        >
+          <option value="">Выберите банк</option>
+          {toBanks.map((bank) => (
+            <option key={bank.name} value={bank.name}>
+              {bank.name}
+            </option>
+          ))}
+        </select>
       </div>
       <div className="form-group">
         <label htmlFor="description">Описание</label>
