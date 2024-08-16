@@ -63,6 +63,7 @@ const Transfers: React.FC = () => {
       handleCloseModal();
     } catch (error) {
       alert("Ошибка при выполнении перевода");
+      console.log(error);
     }
   };
 
@@ -162,7 +163,12 @@ const Transfers: React.FC = () => {
       )}
 
       {transferType === "replenish" && (
-        <ReplenishTransferForm data={data} handleChange={handleChange} />
+        <ReplenishTransferForm
+          data={data}
+          companies={companies}
+          toBanks={toBanks}
+          handleChange={handleChange}
+        />
       )}
 
       <div className="form-group mb-4">
